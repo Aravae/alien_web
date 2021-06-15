@@ -1,9 +1,20 @@
+import base64
+from PIL import Image
 import streamlit as st
-
 import numpy as np
 import pandas as pd
-
 import requests
+
+st.set_page_config(
+    page_title="Meet an alien in the US",  # => Quick reference - Streamlit
+    page_icon="🐍",
+    layout="centered",  # wide
+    initial_sidebar_state="auto")  # collapsed
+
+
+
+st.markdown(
+    "![Alt Text](https://media.giphy.com/media/xT0GqHajFY3GXePWBW/giphy.gif)")
 
 st.markdown('''# MEET an ALIEN in the US! 
 ## Choose your State and season you're interested in''')
@@ -46,26 +57,19 @@ for index, row in df.iterrows():
 
 filtered_df = df[df['State'] == option]
 
-#st.write(filtered_df)
-
 #''' Choosing your Season''''
 
 season = st.radio('Select a Season', ('winter', 'spring', 'summer', 'autumn'))
-
-st.write(season)
-
 
 #url = 'https://...../predict'
 
 params = dict(
     state = state_brev,
-    season = season
-)
+    season = season)
 
 response = requests.get(url, params=params)
-
 prediction = response.json()
 
 pred = prediction['prediction']
 
-pred
+st.write('pred')
