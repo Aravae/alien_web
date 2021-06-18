@@ -70,13 +70,20 @@ def get_select_box_data():
     return df
 
 
-@st.cache
+@st.cache(suppress_st_warning=True)
 def get_reports_df():
     df = pd.read_csv(f"gs://{BUCKET_NAME}/{BUCKET_TRAIN_DATA_PATH}")
     df = df.rename(columns={'longitude ': 'longitude'})
     df = df.apply(lambda x: pd.to_numeric(x, errors='coerce')).dropna()
-    df['count'] = 1
-    return df[['latitude', 'longitude', 'count']]
+
+    center_location = 29.8830556, -97.9411111
+    m = folium.Map(location=center_location, control_scale=True, zoom_start=3)
+
+    for lat, lng in zip(df['latitude'], df['longitude']):
+        print(lat, lng)
+        folium.CircleMarker(locationn=(lat, lng)).add_to(m)
+
+    folium_static(m)
 
 
 with header:
@@ -90,17 +97,9 @@ with header:
     """)
 
 with report_maps:
-    center_location = 29.8830556, -97.9411111
-    m = folium.Map(location=center_location, control_scale=True, zoom_start=3)
+    get_reports_df()
 
-    coords_df = get_reports_df()
 
-    heatmap_data = coords_df.groupby(['latitude', 'longitude']).sum().reset_index().values.tolist()
-
-    gradient = {0.2: 'blue', 0.4: 'lime', 0.6: 'orange', 1: 'red'}
-    HeatMap(data=heatmap_data, radius=5, gradient=gradient, max_zoom=13).add_to(m)
-
-    folium_static(m)
 
 with user_input:
     st.sidebar.header('Sightings prediction')
