@@ -77,6 +77,8 @@ def get_reports_df():
     df = df.rename(columns={'longitude ': 'longitude'})
     df = df.apply(lambda x: pd.to_numeric(x, errors='coerce')).dropna()
 
+    st.write(df.head())
+
     center_location = 29.8830556, -97.9411111
     m = folium.Map(location=center_location, control_scale=True, zoom_start=3)
 
