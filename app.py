@@ -33,8 +33,10 @@ def get_select_box_data():
                            'ok', 'or', 'pa', 'rh', 'sc',
                            'sd', 'tn', 'tx', 'ut', 'vt', 'va',
                            'wa', 'wv', 'wi', 'wy']
-})
+    })
+
     return df
+
 
 df = get_select_box_data()
 
@@ -55,12 +57,9 @@ season = st.radio('Select a Season', ('winter', 'spring', 'summer', 'autumn'))
 st.write(season)
 
 
-#url = 'https://...../predict'
+url = 'https://alienfuturepredict-ytkptzsdgq-ew.a.run.app/predict'
 
-params = dict(
-    state = state_brev,
-    season = season
-)
+params = dict(state=state_brev, season=season)
 
 response = requests.get(url, params=params)
 
