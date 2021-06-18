@@ -10,6 +10,7 @@ from streamlit_folium import folium_static
 PREDICTION_URL = 'https://alienfuturepredict-ytkptzsdgq-ew.a.run.app/predict'
 BUCKET_NAME = 'ufo_sightings'
 BUCKET_TRAIN_DATA_PATH = 'data/scrubbed.csv'
+Testing = 'test'
 
 st.set_page_config(
     page_title="Meet an Alien",
