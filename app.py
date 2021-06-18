@@ -10,7 +10,7 @@ from streamlit_folium import folium_static
 PREDICTION_URL = 'https://alienfuturepredict-ytkptzsdgq-ew.a.run.app/predict'
 BUCKET_NAME = 'ufo_sightings'
 BUCKET_TRAIN_DATA_PATH = 'data/scrubbed.csv'
-Testing = 'test'
+BUCKET_PERF_DATA_PATH = 'data/perf_matrix.csv'
 
 st.set_page_config(
     page_title="Meet an Alien",
@@ -21,6 +21,7 @@ st.set_page_config(
 header = st.beta_container()
 user_input = st.beta_container()
 report_maps = st.beta_container()
+performance = st.beta_container()
 
 CSS = """
 h1 {
@@ -83,6 +84,13 @@ def get_reports_df():
     return df
 
 
+@st.cache
+def get_performance_data():
+    df = pd.read_csv(f"gs://{BUCKET_NAME}/{BUCKET_PERF_DATA_PATH}")
+
+    return df
+
+
 with header:
     st.title("Meet an Alien")
     st.markdown("""
@@ -103,12 +111,12 @@ with user_input:
     if st.sidebar.button('Predict sightings'):
         state = states_df.loc[states_df['State'] == option, 'state_abbreviation'].iloc[0]
 
-        params = dict(state=state, season='winter')
+        params = dict(state=state, season='summer')
         response = requests.get(PREDICTION_URL, params=params)
 
         prediction = response.json()
 
-        sightings = floor(prediction['prediction'])
+        sightings = floor(prediction['prediction']) if prediction['prediction'] > 1 else 0
         if sightings == 1:
             word = 'sighting'
         else:
@@ -116,7 +124,7 @@ with user_input:
 
         HTML = f"""
         <div class="sightings-prediction">
-            <p>Next season you can expect</p>
+            <p>Next winter you can expect</p>
             <h1><strong>{sightings}</strong> {word}</h1>
             <p>in {option}</p>
         </div>
@@ -135,3 +143,6 @@ with report_maps:
         folium.CircleMarker(location=(lat, lng), radius=2, color='green').add_to(m)
 
     folium_static(m)
+
+with performance:
+    st.dataframe(get_performance_data())
