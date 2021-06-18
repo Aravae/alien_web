@@ -74,19 +74,13 @@ def get_select_box_data():
 @st.cache(suppress_st_warning=True)
 def get_reports_df():
     df = pd.read_csv(f"gs://{BUCKET_NAME}/{BUCKET_TRAIN_DATA_PATH}")
+
+    df = df.head(2000)
+
     df = df.rename(columns={'longitude ': 'longitude'})
-    df = df.apply(lambda x: pd.to_numeric(x, errors='coerce')).dropna()
+    df = df[['latitude', 'longitude']].apply(lambda x: pd.to_numeric(x, errors='coerce')).dropna()
 
-    st.write(df.head())
-
-    center_location = 29.8830556, -97.9411111
-    m = folium.Map(location=center_location, control_scale=True, zoom_start=3)
-
-    for lat, lng in zip(df['latitude'], df['longitude']):
-        print(lat, lng)
-        folium.CircleMarker(locationn=(lat, lng)).add_to(m)
-
-    folium_static(m)
+    return df
 
 
 with header:
@@ -98,11 +92,6 @@ with header:
     **Note:** To make a prediction, select a State and we will predict the number of sightings you can expect for the next season (Spring, summer, etc.)
     
     """)
-
-with report_maps:
-    get_reports_df()
-
-
 
 with user_input:
     st.sidebar.header('Sightings prediction')
@@ -133,3 +122,16 @@ with user_input:
         </div>
         """
         st.sidebar.write(HTML, unsafe_allow_html=True)
+
+
+with report_maps:
+    st.title('Reports of UFO sightings in the past 10 years')
+    coords = get_reports_df()
+
+    center_location = 29.8830556, -97.9411111
+    m = folium.Map(location=center_location, control_scale=True, zoom_start=3)
+
+    for lat, lng in zip(coords['latitude'], coords['longitude']):
+        folium.CircleMarker(location=(lat, lng), radius=2, color='green').add_to(m)
+
+    folium_static(m)
