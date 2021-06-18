@@ -1,6 +1,7 @@
 streamlit
-
+streamlit-folium
 numpy
 pandas
 requests
 setuptools
+folium
