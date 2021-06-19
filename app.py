@@ -8,7 +8,7 @@ from streamlit_folium import folium_static
 PREDICTION_URL = 'https://alienfuturepredict-ytkptzsdgq-ew.a.run.app/predict'
 BUCKET_NAME = 'ufo_sightings'
 BUCKET_TRAIN_DATA_PATH = 'data/scrubbed.csv'
-BUCKET_PERF_DATA_PATH = 'data/perf_matrix.csv'
+BUCKET_ACTUAL_TARGET = 'data/final_df_2020_summer.csv'
 
 st.set_page_config(
     page_title="Meet an Alien",
@@ -85,8 +85,8 @@ def get_reports_df():
 
 
 @st.cache
-def get_performance_data():
-    df = pd.read_csv(f"gs://{BUCKET_NAME}/{BUCKET_PERF_DATA_PATH}")
+def get_actual_target():
+    df = pd.read_csv(f"gs://{BUCKET_NAME}/{BUCKET_ACTUAL_TARGET}")
 
     return df
 
