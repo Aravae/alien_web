@@ -76,6 +76,8 @@ def get_reports_df():
 
     df = df.head(2000)
 
+    df = df.loc[df['country'] == 'us']
+
     df = df.rename(columns={'longitude ': 'longitude'})
     df = df[['latitude', 'longitude']].apply(lambda x: pd.to_numeric(x, errors='coerce')).dropna()
 
