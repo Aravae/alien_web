@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 from math import floor
 from streamlit_folium import folium_static
+import numpy as np
 
 PREDICTION_URL = 'https://alienfuturepredict-ytkptzsdgq-ew.a.run.app/predict'
 BUCKET_NAME = 'ufo_sightings'
