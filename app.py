@@ -133,7 +133,7 @@ with user_input:
         """
         st.sidebar.write(HTML, unsafe_allow_html=True)
 
-        get_actual_target(state)
+        actual = get_actual_target(state)
 
 
 with report_maps:
@@ -147,6 +147,3 @@ with report_maps:
         folium.CircleMarker(location=(lat, lng), radius=2, color='green').add_to(m)
 
     folium_static(m)
-
-with performance:
-
