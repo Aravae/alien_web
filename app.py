@@ -85,10 +85,12 @@ def get_reports_df():
 
 
 @st.cache
-def get_actual_target():
-    df = pd.read_csv(f"gs://{BUCKET_NAME}/{BUCKET_ACTUAL_TARGET}")
+def get_actual_target(chosen_state=None):
+    if chosen_state:
+        df = pd.read_csv(f"gs://{BUCKET_NAME}/{BUCKET_ACTUAL_TARGET}")
+        state_data = df.loc[df['state'] == chosen_state]
 
-    return df
+        return state_data['sightings_days']
 
 
 with header:
@@ -131,6 +133,8 @@ with user_input:
         """
         st.sidebar.write(HTML, unsafe_allow_html=True)
 
+        get_actual_target(state)
+
 
 with report_maps:
     st.title('Reports of UFO sightings in the past 10 years')
@@ -145,4 +149,4 @@ with report_maps:
     folium_static(m)
 
 with performance:
-    st.dataframe(get_performance_data())
+
