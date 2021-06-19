@@ -122,7 +122,7 @@ with user_input:
 
         HTML = f"""
         <div class="sightings-prediction">
-            <p>Next winter you can expect</p>
+            <p>Next Autumn you can expect</p>
             <h1><strong>{sightings}</strong> {word}</h1>
             <p>in {option}</p>
         </div>
