@@ -147,3 +147,19 @@ with report_maps:
         folium.CircleMarker(location=(lat, lng), radius=2, color='green').add_to(m)
 
     folium_static(m)
+
+
+@st.cache
+def get_histo():
+    df = pd.DataFrame(
+        [actual, sightings],
+        columns=['a']
+    )
+
+    return np.histogram(
+        df.a, bins=2)[0]
+
+
+hist_values = get_histo()
+
+st.bar_chart(hist_values)
